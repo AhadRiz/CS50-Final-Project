@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIEAS Chatbot</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #1a1a3d; /* Dark navy blue background */
+            color: #f8f9fa;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .chatbox {
+            width: 400px;
+            background: #2a2a52; /* Slightly lighter navy blue */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px 0px #000;
+        }
+
+        h3 {
+            background-color: #1e1e40; /* Darker shade for header */
+            color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        #chat-output {
+            background-color: #282840;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .user-input {
+            margin-top: 10px;
+        }
+
+        .form-control {
+            background-color: #353553; /* Darker input field background */
+            color: #f8f9fa; /* Light text color */
+            border: none;
+            border-radius: 5px;
+        }
+
+        .form-control:focus {
+            background-color: #2c2c52; /* Slightly lighter on focus */
+            color: #f8f9fa;
+            box-shadow: none;
+        }
+
+        .btn-primary {
+            background-color: #3a3a6f; /* Darker blue for button */
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #505080; /* Slightly lighter on hover */
+        }
+
+        #chat-output div {
+            margin-bottom: 10px;
+        }
+
+        #chat-output div strong {
+            display: block;
+            font-weight: bold;
+        }
+
+        #chat-output div.user {
+            color: #0084ff;
+        }
+
+        #chat-output div.bot {
+            color: #cccccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chatbox">
+        <h3>PIEAS Chatbot</h3>
+        <div id="chat-output"></div>
+        <form id="chat-form">
+            <input type="text" id="user-input" class="form-control" placeholder="Ask me anything about PIEAS...">
+            <button type="submit" class="btn btn-primary user-input">Send</button>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $("#chat-form").on("submit", function(event) {
+            event.preventDefault();
+            let userInput = $("#user-input").val();
+            $("#chat-output").append(`<div class="user"><strong>You:</strong> ${userInput}</div>`);
+            $.post("/get", { msg: userInput }).done(function(response) {
+                $("#chat-output").append(`<div class="bot"><strong>Bot:</strong> ${response}</div>`);
+                $('#chat-output').scrollTop($('#chat-output')[0].scrollHeight); // Scroll to bottom
+            });
+            $("#user-input").val("");
+        });
+    </script>
+</body>
+
+</html>
